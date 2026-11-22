@@ -1,0 +1,25 @@
+.product-page__image {
+  width: 100%;
+  background-color: $color-bg-layout;
+  border-radius: $radius-md;
+}
+
+.product-page__tag {
+  text-transform: capitalize;
+}
+
+.product-page__title {
+  margin: 0;
+}
+
+.product-page__price {
+  margin-bottom: 0;
+  color: $color-primary;
+  font-size: $font-size-lg;
+}
+
+.product-page__top {
+  position: fixed;
+  right: $space-lg;
+  bottom: $space-lg;
+}
