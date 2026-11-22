@@ -10,6 +10,7 @@ Query: `search`, `category` (`keyboards`, `ducks`, `coffee`, `stickers`), `inSto
 
 - 200 `{ items: Product[], total: number }`
 - 500 when `search=__error_500`
+- Catalog UI demo: URL `fault=500` maps to that search; `fault=empty` searches `__no_match__` for an empty PageStatus
 
 ### GET /api/products/:id
 
@@ -25,7 +26,7 @@ Body `{ email, password }`.
 - 400 validation `details`
 - 401 wrong password
 
-Demo: `ada@bugbazaar.dev` / `quack`. Token: `token-ada`.
+Demo: `umair@bugbazaar.dev` / `quack`. Token: `token-umair`.
 
 ### GET /api/me
 

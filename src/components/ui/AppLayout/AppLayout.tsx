@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { LoginOutlined, ShopOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
-import { Badge, Button, Flex, Layout, Menu, Typography } from 'antd';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Badge, Button, Flex, Grid, Layout, Menu } from 'antd';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../hooks/redux';
 import { selectCartCount } from '../../../features/cart/cartSlice';
 import './AppLayout.scss';
@@ -39,6 +39,8 @@ export default function AppLayout() {
   const location = useLocation();
   const count = useAppSelector(selectCartCount);
   const user = useAppSelector((state) => state.session.user);
+  const screens = Grid.useBreakpoint();
+  const isDesktop = Boolean(screens.md);
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -49,7 +51,7 @@ export default function AppLayout() {
       <Sider
         className="app-layout__sider"
         breakpoint="md"
-        collapsedWidth={80}
+        collapsedWidth={isDesktop ? 80 : 0}
         width={220}
         collapsible
         collapsed={collapsed}
@@ -57,9 +59,17 @@ export default function AppLayout() {
         theme="light"
       >
         <div className="app-layout__sider-inner">
-          <Typography.Title level={4} className="app-layout__brand">
-            {collapsed ? 'BB' : 'Bug Bazaar'}
-          </Typography.Title>
+          <Link className="app-layout__brand" to="/">
+            <img
+              className={
+                collapsed && isDesktop
+                  ? 'app-layout__logo app-layout__logo--collapsed'
+                  : 'app-layout__logo'
+              }
+              src="/logo.svg"
+              alt="Bug Bazaar"
+            />
+          </Link>
           <Menu
             className="app-layout__menu"
             mode="inline"
@@ -72,25 +82,24 @@ export default function AppLayout() {
       </Sider>
       <Layout>
         <Header className="app-layout__header">
-          <Typography.Title level={4} className="app-layout__title">
-            The Bug Bazaar
-          </Typography.Title>
-          <Flex className="app-layout__tools" align="center" gap="middle">
+          <Flex className="app-layout__tools" align="center" gap="middle" justify="flex-end">
             <Badge count={count} showZero={false}>
               <Button
                 type="default"
                 icon={<ShoppingCartOutlined />}
+                aria-label="Cart"
                 onClick={() => navigate('/cart')}
               >
-                Cart
+                {isDesktop ? 'Cart' : null}
               </Button>
             </Badge>
             <Button
               type="primary"
               icon={user ? <UserOutlined /> : <LoginOutlined />}
+              aria-label={user ? user.name : 'Sign in'}
               onClick={() => navigate(user ? '/account' : '/login')}
             >
-              {user ? user.name : 'Sign in'}
+              {isDesktop ? (user ? user.name : 'Sign in') : null}
             </Button>
           </Flex>
         </Header>

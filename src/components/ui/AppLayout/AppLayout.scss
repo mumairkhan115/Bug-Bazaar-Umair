@@ -41,12 +41,21 @@
 }
 
 .app-layout__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: $space-md;
-  text-align: center;
-  color: $color-primary;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-decoration: none;
+}
+
+.app-layout__logo {
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+}
+
+.app-layout__logo--collapsed {
+  max-width: 40px;
 }
 
 .app-layout__menu {
@@ -58,17 +67,26 @@
 .app-layout__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 0 $space-lg;
   border-bottom: 1px solid $color-border;
   background-color: $color-bg;
 }
 
-.app-layout__title {
-  margin: 0;
-  color: $color-text;
+.app-layout__tools {
+  width: 100%;
 }
 
 .app-layout__content {
   padding: $space-lg;
+}
+
+@media (width <= 768px) {
+  .app-layout__header {
+    padding: 0 $space-md;
+  }
+
+  .app-layout__content {
+    padding: $space-md;
+  }
 }

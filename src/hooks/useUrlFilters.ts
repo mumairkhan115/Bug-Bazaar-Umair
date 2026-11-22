@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import { isCategory, isSortKey } from '../domain/catalog';
 import type { Category, SortKey } from '../domain/types';
 
+export type FaultMode = '' | '500' | 'empty';
+
 export interface UrlFilters {
   search: string;
   category: Category | '';
@@ -10,6 +12,7 @@ export interface UrlFilters {
   sort: SortKey;
   page: number;
   pageSize: 12 | 24;
+  fault: FaultMode;
 }
 
 /**
@@ -32,6 +35,13 @@ export function useUrlFilters() {
   return { filters, updateFilters };
 }
 
+function parseFault(value: string | null): FaultMode {
+  if (value === '500' || value === 'empty') {
+    return value;
+  }
+  return '';
+}
+
 export function parseFilters(params: URLSearchParams): UrlFilters {
   const category = params.get('category');
   const sort = params.get('sort');
@@ -44,6 +54,7 @@ export function parseFilters(params: URLSearchParams): UrlFilters {
     sort: isSortKey(sort) ? sort : 'name',
     page: Number.isFinite(page) && page > 0 ? Math.floor(page) : 1,
     pageSize: params.get('pageSize') === '24' ? 24 : 12,
+    fault: parseFault(params.get('fault')),
   };
 }
 
@@ -66,6 +77,9 @@ export function filtersToSearchParams(filters: UrlFilters): URLSearchParams {
   }
   if (filters.pageSize !== 12) {
     params.set('pageSize', String(filters.pageSize));
+  }
+  if (filters.fault) {
+    params.set('fault', filters.fault);
   }
   return params;
 }

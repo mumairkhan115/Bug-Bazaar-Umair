@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { ClearOutlined, FilterOutlined } from '@ant-design/icons';
-import { Badge, Button, Drawer, Flex, Input, Select, Space, Switch, Typography } from 'antd';
+import { Alert, Badge, Button, Drawer, Flex, Input, Select, Space, Switch, Typography } from 'antd';
 import { categories } from '../../domain/types';
-import type { UrlFilters } from '../../hooks/useUrlFilters';
+import type { FaultMode, UrlFilters } from '../../hooks/useUrlFilters';
 import './FiltersBar.scss';
 
 interface FiltersBarProps {
@@ -26,6 +26,12 @@ const sortOptions = [
   { value: 'rating', label: 'Rating' },
 ];
 
+const faultOptions: { value: FaultMode; label: string }[] = [
+  { value: '', label: 'None' },
+  { value: '500', label: 'Server error (500)' },
+  { value: 'empty', label: 'Empty results' },
+];
+
 function activeFilterCount(filters: UrlFilters): number {
   let count = 0;
   if (filters.category) {
@@ -37,7 +43,20 @@ function activeFilterCount(filters: UrlFilters): number {
   if (filters.sort !== 'name') {
     count += 1;
   }
+  if (filters.fault) {
+    count += 1;
+  }
   return count;
+}
+
+function faultStatusMessage(fault: FaultMode): string {
+  if (fault === '500') {
+    return 'Active: catalog returns a 500 so PageStatus shows the error state.';
+  }
+  if (fault === 'empty') {
+    return 'Active: catalog returns no matches so PageStatus shows empty.';
+  }
+  return 'No fault selected. The catalog loads normally.';
 }
 
 export default function FiltersBar({
@@ -119,6 +138,29 @@ export default function FiltersBar({
               />
               <label htmlFor="in-stock-only">In stock only</label>
             </Flex>
+          </div>
+          <div className="filters-bar__field">
+            <Typography.Title level={5} className="filters-bar__heading">
+              Error Simulation
+            </Typography.Title>
+            <label className="filters-bar__label" htmlFor="filters-fault">
+              Demo status
+            </label>
+            <Select
+              id="filters-fault"
+              className="filters-bar__control"
+              value={filters.fault}
+              options={faultOptions}
+              onChange={(fault: FaultMode) => onChange({ fault, page: 1 })}
+            />
+            <Alert
+              className="filters-bar__fault-alert"
+              type={
+                filters.fault === '500' ? 'error' : filters.fault === 'empty' ? 'warning' : 'info'
+              }
+              showIcon
+              message={faultStatusMessage(filters.fault)}
+            />
           </div>
           <Button icon={<ClearOutlined />} onClick={handleClear} block>
             Clear filters

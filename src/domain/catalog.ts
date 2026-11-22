@@ -31,7 +31,7 @@ export function createCatalog(): Product[] {
       category,
       stock: index % 19 === 0 ? 0 : (index % 12) + 1,
       rating: (index % 5) + 1,
-      imageUrl: `/gear/${category}.svg`,
+      imageUrl: `https://picsum.photos/seed/bugbazaar-${id}/400/300`,
     };
   });
 }

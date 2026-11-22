@@ -67,7 +67,7 @@ export default function LoginPage() {
         <Card>
           <Space className="login-page" direction="vertical" size="middle">
             <Typography.Title level={3}>Sign in</Typography.Title>
-            <Typography.Paragraph>Demo account: ada@bugbazaar.dev / quack</Typography.Paragraph>
+            <Typography.Paragraph>Demo account: umair@bugbazaar.dev / quack</Typography.Paragraph>
             {formError ? <Alert type="error" showIcon message={formError} /> : null}
             <Form<LoginValues>
               form={form}

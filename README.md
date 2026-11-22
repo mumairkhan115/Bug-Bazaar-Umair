@@ -1,4 +1,4 @@
-# The Bug Bazaar
+﻿# The Bug Bazaar
 
 A React and TypeScript store for developer gear. Prices are in cents. The Vite mock API serves the shared contract so the app runs without a real backend.
 
@@ -16,7 +16,7 @@ npm run dev
 
 Open the URL Vite prints. The mock API is part of the dev server, so no backend is required.
 
-Sign in with `ada@bugbazaar.dev` / `quack`.
+Sign in with `umair@bugbazaar.dev` / `quack`.
 
 ## Environment
 
@@ -26,17 +26,17 @@ Copy `.env.example` to `.env` only if you need to override the API origin. The d
 
 ## Scripts
 
-| Script | Result |
-| --- | --- |
-| `npm run dev` | Store with the mock API and stock socket |
-| `npm run test` | Behavior tests |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | `tsc -b` with strict TypeScript |
-| `npm run format:check` | Prettier |
-| `npm run stylelint` | SCSS rules, including BEM and color tokens |
-| `npm run build` | Typecheck and production bundle |
-| `npm run validate` | All of the checks above |
-| `npm run preview` | Production bundle plus the mock API |
+| Script                 | Result                                     |
+| ---------------------- | ------------------------------------------ |
+| `npm run dev`          | Store with the mock API and stock socket   |
+| `npm run test`         | Behavior tests                             |
+| `npm run lint`         | ESLint                                     |
+| `npm run typecheck`    | `tsc -b` with strict TypeScript            |
+| `npm run format:check` | Prettier                                   |
+| `npm run stylelint`    | SCSS rules, including BEM and color tokens |
+| `npm run build`        | Typecheck and production bundle            |
+| `npm run validate`     | All of the checks above                    |
+| `npm run preview`      | Production bundle plus the mock API        |
 
 A green build does not prove the UI standards. Stylelint, `docs/UI.md`, and the React review skill do that work.
 

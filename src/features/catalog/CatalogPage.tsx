@@ -48,24 +48,30 @@ export default function CatalogPage() {
     }
   }, [screens.lg, filters.pageSize, updateFilters]);
 
-  const query = useMemo<ProductQuery>(
-    () => ({
-      search: filters.search,
+  const query = useMemo<ProductQuery>(() => {
+    let search = filters.search;
+    if (filters.fault === '500') {
+      search = '__error_500';
+    } else if (filters.fault === 'empty') {
+      search = '__no_match__';
+    }
+    return {
+      search,
       category: filters.category,
       inStock: filters.inStock,
       sort: filters.sort,
       page: filters.page,
       pageSize: filters.pageSize,
-    }),
-    [
-      filters.category,
-      filters.inStock,
-      filters.page,
-      filters.pageSize,
-      filters.search,
-      filters.sort,
-    ],
-  );
+    };
+  }, [
+    filters.category,
+    filters.fault,
+    filters.inStock,
+    filters.page,
+    filters.pageSize,
+    filters.search,
+    filters.sort,
+  ]);
 
   const { status, page, retry } = useProductSearch(query);
   const onStock = useCallback(
@@ -95,7 +101,14 @@ export default function CatalogPage() {
 
   const handleClear = () => {
     setDraftSearch('');
-    updateFilters({ search: '', category: '', inStock: false, sort: 'name', page: 1 });
+    updateFilters({
+      search: '',
+      category: '',
+      inStock: false,
+      sort: 'name',
+      page: 1,
+      fault: '',
+    });
   };
 
   return (

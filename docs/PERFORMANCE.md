@@ -25,4 +25,3 @@ Skipped. A virtualizer would fight `Row` and `Col`, and it would need an inline 
 ## D4-3 note
 
 Paging plus `createSelector` is the kept optimization. A virtualizer was skipped because it conflicts with `Row` and `Col`.
-

@@ -47,15 +47,15 @@ describe('login and checkout screens', () => {
   it('signs in with the demo account', async () => {
     const user = userEvent.setup();
     vi.mocked(loginRequest).mockResolvedValue({
-      token: 'token-ada',
-      user: { id: 'user-1', name: 'Ada Lovelace', email: 'ada@bugbazaar.dev' },
+      token: 'token-umair',
+      user: { id: 'user-1', name: 'Umair Khan', email: 'umair@bugbazaar.dev' },
     });
     const store = renderWithStore(<LoginPage />);
-    await user.type(screen.getByLabelText('Email'), 'ada@bugbazaar.dev');
+    await user.type(screen.getByLabelText('Email'), 'umair@bugbazaar.dev');
     await user.type(screen.getByLabelText('Password'), 'quack');
     await user.click(screen.getByRole('button', { name: 'Sign in' }));
-    expect(loginRequest).toHaveBeenCalledWith('ada@bugbazaar.dev', 'quack');
-    expect(store.getState().session.token).toBe('token-ada');
+    expect(loginRequest).toHaveBeenCalledWith('umair@bugbazaar.dev', 'quack');
+    expect(store.getState().session.token).toBe('token-umair');
   });
 
   it('places an order from the cart', async () => {

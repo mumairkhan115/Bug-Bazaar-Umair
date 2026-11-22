@@ -2,12 +2,12 @@ import type { User } from './types.ts';
 
 export const demoUser: User = {
   id: 'user-1',
-  name: 'Ada Lovelace',
-  email: 'ada@bugbazaar.dev',
+  name: 'Umair Khan',
+  email: 'umair@bugbazaar.dev',
 };
 
 export const demoPassword = 'quack';
-export const demoToken = 'token-ada';
+export const demoToken = 'token-umair';
 
 export type LoginResult =
   | { ok: true; token: string; user: User }
