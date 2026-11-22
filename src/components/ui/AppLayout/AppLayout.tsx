@@ -28,10 +28,11 @@ function selectedKey(pathname: string): string {
 }
 
 /**
- * The store shell: navigation, cart count, and the active route.
+ * The store shell: navigation, cart count, skip link, and the active route.
  *
  * React concept: Outlet renders the child route. The badge reads a selector,
  * so it updates when the cart slice changes and not when a filter changes.
+ * The skip link targets #main so keyboard users can bypass the sider.
  */
 export default function AppLayout() {
   const navigate = useNavigate();
