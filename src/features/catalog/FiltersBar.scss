@@ -1,0 +1,43 @@
+.filters-bar {
+  margin-bottom: $space-lg;
+}
+
+.filters-bar__search {
+  flex: 1;
+  min-width: 200px;
+  max-width: 480px;
+}
+
+.filters-bar__count {
+  margin-top: $space-md;
+  margin-bottom: 0;
+}
+
+.filters-bar__drawer {
+  width: 100%;
+}
+
+.filters-bar__field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  width: 100%;
+}
+
+.filters-bar__label {
+  color: $color-text;
+  font-size: $font-size-sm;
+  line-height: 1.4;
+}
+
+.filters-bar__control {
+  width: 100%;
+}
+
+.filters-bar__heading {
+  margin: 0;
+}
+
+.filters-bar__fault-alert {
+  margin-top: $space-sm;
+}
