@@ -43,6 +43,8 @@ The header badge reads `selectCartCount`. That number is not stored.
 
 ## Patterns
 
+Three patterns show up across the store: an API adapter, custom hooks, and container/presentational split.
+
 ### API adapter
 
 `handleApi` in `src/domain/api.ts` is the contract. The Vite middleware is a thin transport. React never imports `handleApi`. Services call `apiRequest`. This keeps status codes and tests in one place.
