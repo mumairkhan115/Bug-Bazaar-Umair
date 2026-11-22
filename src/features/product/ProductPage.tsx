@@ -17,7 +17,7 @@ import { addItem } from '../cart/cartSlice';
 import './ProductPage.scss';
 
 /**
- * Product detail with a cancelled fetch and a removed scroll listener.
+ * Product detail with aborted in-flight fetches and a Back to Top control.
  *
  * React concept: the effect depends on the id. Cleanup aborts the request
  * and removes the scroll listener so a closed page does not keep working.
