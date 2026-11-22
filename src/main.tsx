@@ -1,18 +1,30 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { App as AntdApp, ConfigProvider } from "antd";
-import './assets/sass/style.scss';
-import 'antd/dist/reset.css'
-import App from './App.tsx'
-import 'antd-css-utilities/utility.min.css'
-import themeTokens from "./config/themeToken";
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
+import { ConfigProvider, App as AntdApp } from 'antd';
+import { Provider } from 'react-redux';
+import 'antd/dist/reset.css';
+import './assets/sass/global.scss';
+import AppErrorBoundary from './components/ui/AppErrorBoundary/AppErrorBoundary';
+import { store } from './stores/store';
+import { router } from './router';
+import theme from './config/theme';
 
-createRoot(document.getElementById('root')!).render(
+const root = document.getElementById('root');
+if (!root) {
+  throw new Error('Root element missing');
+}
+
+createRoot(root).render(
   <StrictMode>
-    <ConfigProvider theme={themeTokens}>
-      <AntdApp>
-        <App />
-      </AntdApp>  
-    </ConfigProvider>
+    <Provider store={store}>
+      <ConfigProvider theme={theme}>
+        <AntdApp>
+          <AppErrorBoundary>
+            <RouterProvider router={router} />
+          </AppErrorBoundary>
+        </AntdApp>
+      </ConfigProvider>
+    </Provider>
   </StrictMode>,
 );

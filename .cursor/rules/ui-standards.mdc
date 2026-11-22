@@ -1,0 +1,16 @@
+---
+description: UI bans for TSX and SCSS
+globs: src/**/*.{tsx,scss}
+alwaysApply: false
+---
+
+# UI standards
+
+The full rules are in `docs/UI.md`. These bans are the ones that are easy to miss:
+
+- Use Ant Design components for controls, layout, and feedback.
+- Do not add a `style` prop.
+- Put styles in `Component.scss` next to `Component.tsx`, using BEM.
+- Do not write raw color values in component SCSS. Use the variables in `src/assets/sass/variables.scss`.
+- Use `Row` and `Col`. Set `xs`, `sm`, `md`, `lg`, `xl`, and `xxl` on every column.
+- Do not add `@tanstack/react-virtual` or a utility CSS library.

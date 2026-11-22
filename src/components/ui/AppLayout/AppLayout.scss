@@ -1,0 +1,74 @@
+.app-layout {
+  min-height: 100vh;
+}
+
+.app-layout__skip {
+  position: absolute;
+  left: $space-md;
+  top: $space-md;
+  transform: translateY(-200%);
+  background-color: $color-bg;
+  color: $color-text;
+  padding: $space-sm $space-md;
+  z-index: 1000;
+}
+
+.app-layout__skip:focus {
+  transform: translateY(0);
+
+  @include focus-ring;
+}
+
+.app-layout__sider {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid $color-border;
+}
+
+.app-layout__sider .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.app-layout__sider-inner {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.app-layout__brand {
+  margin: $space-md;
+  text-align: center;
+  color: $color-primary;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-layout__menu {
+  flex: 1;
+  overflow-y: auto;
+  border-inline-end: none !important;
+}
+
+.app-layout__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 $space-lg;
+  border-bottom: 1px solid $color-border;
+  background-color: $color-bg;
+}
+
+.app-layout__title {
+  margin: 0;
+  color: $color-text;
+}
+
+.app-layout__content {
+  padding: $space-lg;
+}

@@ -1,0 +1,14 @@
+---
+description: Shared Bug Bazaar engineering workflow
+alwaysApply: true
+---
+
+# Project standards
+
+Follow `AGENTS.md`. It is the shared source of truth.
+
+Before editing, read the docs it names for the task.
+
+If a prompt conflicts with `docs/UI.md`, `docs/CODING_STANDARDS.md`, or `docs/ARCHITECTURE.md`, stop and propose a compliant approach.
+
+Do not add a second copy of these rules.
