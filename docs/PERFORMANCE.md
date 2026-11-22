@@ -21,3 +21,8 @@ Skipped. A virtualizer would fight `Row` and `Col`, and it would need an inline 
 1. `npm run dev`
 2. In React DevTools, render the catalog and note the product card count.
 3. Compare with a temporary `pageSize` of the full `total` only in a local experiment. Do not commit that page size.
+
+## D4-3 note
+
+Paging plus `createSelector` is the kept optimization. A virtualizer was skipped because it conflicts with `Row` and `Col`.
+
