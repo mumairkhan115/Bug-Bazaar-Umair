@@ -35,6 +35,13 @@ AI drafted a lot of the store: mock API, catalog, cart, auth, hooks, CI, and doc
 
 ---
 
+## GitHub Pages
+
+- **Prompt:** Publish a public `github.io` URL for the store.
+- **Kept:** The domain contract (`handleApi`) and the Vite mock for local dev and preview. The Pages build only changes the transport.
+- **Changed and why:** GitHub Pages cannot run the Node mock or the stock socket. The production build answers `/api` in the browser and simulates stock ticks, and the app is served from `/Bug-Bazaar-Umair/` with a `404.html` copy so deep links still boot the router.
+- **Mistake caught:** `base` had been nested under Vite `resolve.alias`, so it never set the asset prefix. It belongs on the config root, and only for the Pages build, or `npm run dev` would also move to that subpath.
+
 ## One thing I would not hand to AI
 
 The 10-minute walkthrough answers: why the token lives in `sessionStorage`, why paging beat virtualization, and what breaks if the idempotency key is dropped. Those have to come from me without reading a generated script.

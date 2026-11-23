@@ -61,12 +61,15 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     headers['Content-Type'] = 'application/json';
   }
 
-  const response = await fetch(`${apiBase()}${path}`, {
-    method,
-    headers,
-    body: options.body === undefined ? undefined : JSON.stringify(options.body),
-    signal: options.signal,
-  });
+  const response =
+    import.meta.env.VITE_STATIC_API === 'true'
+      ? await staticResponse(path, method, options, headers)
+      : await fetch(`${apiBase()}${path}`, {
+          method,
+          headers,
+          body: options.body === undefined ? undefined : JSON.stringify(options.body),
+          signal: options.signal,
+        });
 
   if (response.status === 401) {
     handleUnauthorized();
@@ -86,6 +89,54 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     writeCache(path, data);
   }
   return data;
+}
+
+/**
+ * Answers the request from the in-memory contract.
+ *
+ * Why: GitHub Pages only serves files, so production cannot call the Vite mock server.
+ */
+async function staticResponse(
+  path: string,
+  method: string,
+  options: RequestOptions,
+  headers: Record<string, string>,
+): Promise<Response> {
+  const url = new URL(path, 'http://localhost');
+  const { callStaticApi } = await import('./staticApi');
+  const result = callStaticApi({
+    method,
+    pathname: url.pathname,
+    searchParams: url.searchParams,
+    body: options.body,
+    authorization: headers.Authorization,
+    idempotencyKey: headers['Idempotency-Key'],
+  });
+  if (result.delayMs > 0) {
+    await wait(result.delayMs, options.signal);
+  }
+  return new Response(JSON.stringify(result.body), {
+    status: result.status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+function wait(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      signal?.removeEventListener('abort', onAbort);
+      resolve();
+    }, ms);
+    const onAbort = () => {
+      clearTimeout(timer);
+      reject(new DOMException('Aborted', 'AbortError'));
+    };
+    if (signal?.aborted) {
+      onAbort();
+      return;
+    }
+    signal?.addEventListener('abort', onAbort);
+  });
 }
 
 export function isAbortError(error: unknown): boolean {

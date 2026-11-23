@@ -66,7 +66,7 @@ export default function AppLayout() {
                   ? 'app-layout__logo app-layout__logo--collapsed'
                   : 'app-layout__logo'
               }
-              src="/logo.svg"
+              src={`${import.meta.env.BASE_URL}logo.svg`}
               alt="Bug Bazaar"
             />
           </Link>

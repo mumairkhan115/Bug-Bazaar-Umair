@@ -20,6 +20,10 @@ export function openStockSocket(handlers: {
   let timer = 0;
   let attempt = 0;
 
+  if (import.meta.env.VITE_STATIC_API === 'true') {
+    return openStaticStock(handlers);
+  }
+
   const connect = () => {
     if (stopped) {
       return;
@@ -56,6 +60,39 @@ export function openStockSocket(handlers: {
     stopped = true;
     window.clearTimeout(timer);
     socket?.close();
+    handlers.onStatus('closed');
+  };
+}
+
+/**
+ * Publishes stock ticks without a socket.
+ *
+ * Why: the Pages host cannot upgrade a WebSocket, and the product page still listens for updates.
+ */
+function openStaticStock(handlers: {
+  onStatus: (status: StockStatus) => void;
+  onUpdate: (update: StockUpdate) => void;
+}): () => void {
+  let stopped = false;
+  handlers.onStatus('live');
+  const timer = window.setInterval(() => {
+    if (stopped) {
+      return;
+    }
+    void import('../api/staticApi').then(({ tickStaticStock }) => {
+      if (stopped) {
+        return;
+      }
+      const update = tickStaticStock();
+      if (update) {
+        handlers.onUpdate(update);
+      }
+    });
+  }, 4000);
+
+  return () => {
+    stopped = true;
+    window.clearInterval(timer);
     handlers.onStatus('closed');
   };
 }
