@@ -11,6 +11,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(root, 'src'),
+      base: '/Bug-Bazaar-Umair/',
     },
   },
   css: {
