@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Navy mechanical keyboard">
+  <rect width="400" height="300" fill="#e7eefc"/>
+  <circle cx="200" cy="156" r="108" fill="#c9d7f5"/>
+  <rect x="48" y="86" width="304" height="148" rx="16" fill="#1d3557"/>
+  <rect x="64" y="104" width="28" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="100" y="104" width="28" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="136" y="104" width="28" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="172" y="104" width="28" height="22" rx="4" fill="#4ea1ff"/>
+  <rect x="208" y="104" width="28" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="244" y="104" width="28" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="280" y="104" width="28" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="316" y="104" width="20" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="72" y="136" width="28" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="108" y="136" width="28" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="144" y="136" width="28" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="180" y="136" width="28" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="216" y="136" width="28" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="252" y="136" width="28" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="288" y="136" width="36" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="96" y="168" width="36" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="140" y="168" width="120" height="22" rx="4" fill="#f1f5fb"/>
+  <rect x="268" y="168" width="36" height="22" rx="4" fill="#f1f5fb"/>
+</svg>

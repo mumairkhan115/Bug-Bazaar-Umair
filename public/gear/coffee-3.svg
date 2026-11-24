@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Pink cup of coffee">
+  <rect width="400" height="300" fill="#fde7ef"/>
+  <circle cx="198" cy="158" r="108" fill="#f8c9d8"/>
+  <path d="M128 116h120v74a60 60 0 0 1-120 0z" fill="#fff" stroke="#1a2332" stroke-width="4"/>
+  <path d="M128 150h120v40a60 60 0 0 1-120 0z" fill="#c2185b"/>
+  <ellipse cx="188" cy="116" rx="60" ry="14" fill="#4e342e" stroke="#1a2332" stroke-width="4"/>
+  <path d="M248 138h24a26 26 0 0 1 0 52h-24" fill="none" stroke="#1a2332" stroke-width="4" stroke-linecap="round"/>
+  <path d="M164 84c10-18 10-18 0-34" fill="none" stroke="#8d6e63" stroke-width="4" stroke-linecap="round"/>
+  <path d="M198 78c10-16 10-16 0-30" fill="none" stroke="#8d6e63" stroke-width="4" stroke-linecap="round"/>
+</svg>

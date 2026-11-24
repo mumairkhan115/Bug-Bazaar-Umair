@@ -13,6 +13,17 @@
   margin-bottom: 0;
 }
 
+.filters-bar__total {
+  color: $color-primary;
+  font-size: $font-size-lg;
+  line-height: 1.2;
+}
+
+.filters-bar__match {
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+}
+
 .filters-bar__drawer {
   width: 100%;
 }

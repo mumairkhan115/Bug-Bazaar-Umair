@@ -1,6 +1,7 @@
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Card, Flex, Rate, Tag, Typography } from 'antd';
 import { Link } from 'react-router-dom';
+import { publicAssetUrl } from '../../domain/catalog';
 import { formatPrice } from '../../domain/money';
 import type { Product } from '../../domain/types';
 import './ProductCard.scss';
@@ -19,7 +20,7 @@ export default function ProductCard({ product, onAdd }: ProductCardProps) {
     <Card
       className={className}
       variant="outlined"
-      cover={<img className="product-card__image" src={product.imageUrl} alt="" />}
+      cover={<img className="product-card__image" src={publicAssetUrl(product.imageUrl)} alt="" />}
     >
       <Flex vertical gap="small">
         <Tag className="product-card__tag" color="magenta">

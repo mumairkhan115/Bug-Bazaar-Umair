@@ -1,10 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { useState } from 'react';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Product, ProductPage } from '../domain/types';
 import { useDebouncedValue } from './useDebouncedValue';
 import { useProductSearch } from './useProductSearch';
+import { useUrlFilters } from './useUrlFilters';
 import { listProducts } from '../services/api/products';
 
 vi.mock('../services/api/products', () => ({
@@ -32,6 +34,12 @@ function DebounceProbe() {
       <span>{debounced}</span>
     </div>
   );
+}
+
+function UrlProbe() {
+  useUrlFilters();
+  const location = useLocation();
+  return <div>{location.search}</div>;
 }
 
 function SearchProbe({ search }: { search: string }) {
@@ -62,6 +70,17 @@ describe('custom hooks', () => {
       vi.advanceTimersByTime(300);
     });
     expect(screen.getByText('duck')).toBeInTheDocument();
+  });
+
+  it('drops pageSize from the catalog URL', async () => {
+    render(
+      <MemoryRouter initialEntries={['/?pageSize=24&search=duck']}>
+        <Routes>
+          <Route path="/" element={<UrlProbe />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    expect(await screen.findByText('?search=duck')).toBeInTheDocument();
   });
 
   it('keeps the latest search when an older request resolves last', async () => {

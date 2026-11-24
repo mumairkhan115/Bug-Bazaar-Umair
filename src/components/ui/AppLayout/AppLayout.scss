@@ -19,74 +19,217 @@
   @include focus-ring;
 }
 
-.app-layout__sider {
+.app-layout__header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
-  flex-direction: column;
-  border-right: 1px solid $color-border;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  line-height: 1;
+  padding: 0;
+  border-bottom: 1px solid $color-border;
+  background-color: $color-bg;
 }
 
-.app-layout__sider .ant-layout-sider-children {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-}
-
-.app-layout__sider-inner {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
+.app-layout__bar {
+  width: 100%;
+  max-width: $layout-max;
+  padding: $space-sm $space-lg;
 }
 
 .app-layout__brand {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: $space-md;
+  min-width: 0;
   text-decoration: none;
 }
 
 .app-layout__logo {
-  width: 100%;
-  max-width: 180px;
-  height: auto;
+  display: block;
+  width: auto;
+  max-width: 168px;
+  height: 40px;
 }
 
-.app-layout__logo--collapsed {
-  max-width: 40px;
+.app-layout__identity {
+  min-width: 0;
 }
 
-.app-layout__menu {
-  flex: 1;
-  overflow-y: auto;
-  border-inline-end: none !important;
+.app-layout__feed-dot {
+  display: inline-block;
+  flex-shrink: 0;
+  width: $space-sm;
+  height: $space-sm;
+  border-radius: 50%;
+  background-color: $color-text-secondary;
 }
 
-.app-layout__header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0 $space-lg;
-  border-bottom: 1px solid $color-border;
-  background-color: $color-bg;
+.app-layout__feed-dot--live {
+  background-color: $color-success;
+}
+
+.app-layout__feed-dot--connecting,
+.app-layout__feed-dot--reconnecting {
+  background-color: $color-warning;
+}
+
+.app-layout__feed-dot--closed {
+  background-color: $color-error;
+}
+
+.app-layout__feed-dot--pulse {
+  animation: app-layout-pulse 1.8s ease-in-out infinite;
+}
+
+.app-layout__feed-label,
+.app-layout__feed-state {
+  margin: 0;
+  font-size: $font-size-sm;
+}
+
+.app-layout__feed-label {
+  color: $color-text-secondary;
+}
+
+.app-layout__feed-state {
+  color: $color-text;
+}
+
+@keyframes app-layout-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.35;
+    transform: scale(0.55);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-layout__feed-dot--pulse {
+    animation: none;
+  }
 }
 
 .app-layout__tools {
-  width: 100%;
+  flex: 0 0 auto;
 }
 
 .app-layout__content {
+  width: 100%;
+  max-width: $layout-max;
+  margin-inline: auto;
   padding: $space-lg;
 }
 
+.app-layout__footer {
+  margin-top: auto;
+  padding: $space-xl 0 $space-lg;
+  border-top: 1px solid $color-border;
+  background-color: $color-bg;
+}
+
+.app-layout__footer-inner {
+  width: 100%;
+  max-width: $layout-max;
+  margin-inline: auto;
+  padding-inline: $space-lg;
+}
+
+.app-layout__footer-brand {
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  width: fit-content;
+  color: $color-text;
+  text-decoration: none;
+}
+
+.app-layout__footer-brand:focus-visible {
+  @include focus-ring;
+}
+
+.app-layout__footer-logo {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  object-position: left center;
+  border-radius: $radius-md;
+}
+
+.app-layout__site-name {
+  margin: 0 !important;
+  color: $color-primary !important;
+  line-height: 1;
+}
+
+.app-layout__tagline {
+  margin: 0;
+  color: $color-text-secondary;
+}
+
+.app-layout__column-title {
+  margin-top: 0;
+  margin-bottom: $space-sm;
+  color: $color-primary !important;
+}
+
+.app-layout__footer-link {
+  color: $color-text;
+  text-underline-offset: 3px;
+}
+
+.app-layout__footer-link:hover {
+  color: $color-text;
+}
+
+.app-layout__footer-link:focus-visible {
+  @include focus-ring;
+}
+
+.app-layout__legal {
+  padding-top: $space-lg;
+  border-top: 1px solid $color-border;
+}
+
+.app-layout__copyright {
+  color: $color-text;
+}
+
+.app-layout__credit {
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+}
+
 @media (width <= 768px) {
-  .app-layout__header {
-    padding: 0 $space-md;
+  .app-layout__bar {
+    padding: $space-sm $space-md;
+  }
+
+  .app-layout__logo {
+    max-width: 140px;
+    height: 36px;
+  }
+
+  .app-layout__feed-label {
+    display: none;
   }
 
   .app-layout__content {
     padding: $space-md;
+  }
+
+  .app-layout__footer {
+    padding: $space-lg 0 $space-md;
+  }
+
+  .app-layout__footer-inner {
+    padding-inline: $space-md;
   }
 }

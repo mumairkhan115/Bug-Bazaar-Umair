@@ -49,6 +49,10 @@ function activeFilterCount(filters: UrlFilters): number {
   return count;
 }
 
+function matchLabel(total: number): string {
+  return total === 1 ? 'product matches' : 'products match';
+}
+
 function faultStatusMessage(fault: FaultMode): string {
   if (fault === '500') {
     return 'Active: catalog returns a 500 so PageStatus shows the error state.';
@@ -93,9 +97,12 @@ export default function FiltersBar({
           </Button>
         </Badge>
       </Flex>
-      <Typography.Paragraph className="filters-bar__count" type="secondary">
-        {total} products match
-      </Typography.Paragraph>
+      <Flex className="filters-bar__count" align="baseline" gap="small">
+        <Typography.Text className="filters-bar__total" strong>
+          {total.toLocaleString('en-US')}
+        </Typography.Text>
+        <Typography.Text className="filters-bar__match">{matchLabel(total)}</Typography.Text>
+      </Flex>
       <Drawer
         title="Filters"
         placement="right"

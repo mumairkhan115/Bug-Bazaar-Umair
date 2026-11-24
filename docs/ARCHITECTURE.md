@@ -42,6 +42,8 @@ Redux is beside that path for the cart and the session. The URL is beside it for
 
 The header badge reads `selectCartCount`. That number is not stored.
 
+Page size is not in the table. The catalog shows 12 cards below `lg` and 24 from `lg` up. That follows the viewport, so the page URL does not include `pageSize`. The products request still sends `pageSize`, because that is the API contract.
+
 ## Patterns
 
 Three patterns show up across the store: an API adapter, custom hooks, and container/presentational split.

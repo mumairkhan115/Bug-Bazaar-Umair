@@ -22,7 +22,8 @@ This file owns TypeScript, React, naming, and comments. UI rules stay in `docs/U
 
 ## State
 
-- URL: search, category, stock filter, sort, page, page size.
+- URL: search, category, stock filter, sort, page.
+- Viewport: catalog page size, 12 below `lg` and 24 from `lg` up. Do not write it to the URL.
 - Redux: cart and session.
 - Component state: form drafts, the idempotency key, and request snapshots.
 - Server cache: `src/services/api/cache.ts`.

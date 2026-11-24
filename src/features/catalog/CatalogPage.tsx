@@ -1,14 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Col, Flex, Grid, Pagination, Row, Typography } from 'antd';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Col, Flex, Grid, Pagination, Row } from 'antd';
 import { useAppDispatch } from '../../hooks/redux';
+import { useLiveStock } from '../../components/ui/AppLayout/liveStockContext';
 import PageStatus from '../../components/ui/PageStatus/PageStatus';
 import type { Product, ProductQuery } from '../../domain/types';
 import { useDebouncedValue } from '../../hooks/useDebouncedValue';
 import { useProductSearch } from '../../hooks/useProductSearch';
-import { useStockFeed } from '../../hooks/useStockFeed';
 import { useUrlFilters } from '../../hooks/useUrlFilters';
-import type { StockUpdate } from '../../services/stock/stockClient';
-import { addItem, syncStock } from '../cart/cartSlice';
+import { addItem } from '../cart/cartSlice';
 import FiltersBar from './FiltersBar';
 import ProductCard from './ProductCard';
 import './CatalogPage.scss';
@@ -17,11 +16,15 @@ import './CatalogPage.scss';
  * Catalog container: URL filters, debounced search, paged cards, and live stock.
  *
  * React concept: the page of cards is a derived view. Search text is local
- * until the debounce writes it to the URL.
+ * until the debounce writes it to the URL. Page size follows the lg
+ * breakpoint and is not written to the URL.
  */
 export default function CatalogPage() {
   const dispatch = useAppDispatch();
   const screens = Grid.useBreakpoint();
+  const pageSizeReady = screens.lg !== undefined;
+  const pageSize: 12 | 24 = screens.lg ? 24 : 12;
+  const measuredSize = useRef<12 | 24 | null>(null);
   const { filters, updateFilters } = useUrlFilters();
   const [draftSearch, setDraftSearch] = useState(filters.search);
   const [seenSearch, setSeenSearch] = useState(filters.search);
@@ -30,7 +33,7 @@ export default function CatalogPage() {
     setDraftSearch(filters.search);
   }
   const debouncedSearch = useDebouncedValue(draftSearch, 300);
-  const [stockOverlay, setStockOverlay] = useState<Record<string, number>>({});
+  const { stocks } = useLiveStock();
 
   useEffect(() => {
     if (debouncedSearch !== filters.search) {
@@ -38,15 +41,22 @@ export default function CatalogPage() {
     }
   }, [debouncedSearch, filters.search, updateFilters]);
 
+  /**
+   * Moves back to page 1 when the viewport crosses lg.
+   *
+   * Why: 12 and 24 items are different slices. The size stays off the URL
+   * because it belongs to the screen, not to a copied filter link.
+   */
   useEffect(() => {
-    if (screens.lg === undefined) {
+    if (!pageSizeReady) {
       return;
     }
-    const nextSize = screens.lg ? 24 : 12;
-    if (filters.pageSize !== nextSize) {
-      updateFilters({ pageSize: nextSize, page: 1 });
+    const previous = measuredSize.current;
+    measuredSize.current = pageSize;
+    if (previous !== null && previous !== pageSize && filters.page !== 1) {
+      updateFilters({ page: 1 });
     }
-  }, [screens.lg, filters.pageSize, updateFilters]);
+  }, [filters.page, pageSize, pageSizeReady, updateFilters]);
 
   const query = useMemo<ProductQuery>(() => {
     let search = filters.search;
@@ -61,30 +71,22 @@ export default function CatalogPage() {
       inStock: filters.inStock,
       sort: filters.sort,
       page: filters.page,
-      pageSize: filters.pageSize,
+      pageSize,
     };
   }, [
     filters.category,
     filters.fault,
     filters.inStock,
     filters.page,
-    filters.pageSize,
     filters.search,
     filters.sort,
+    pageSize,
   ]);
 
-  const { status, page, retry } = useProductSearch(query);
-  const onStock = useCallback(
-    (update: StockUpdate) => {
-      setStockOverlay((current) => ({ ...current, [update.productId]: update.stock }));
-      dispatch(syncStock(update));
-    },
-    [dispatch],
-  );
-  const stockStatus = useStockFeed(onStock);
+  const { status, page, retry } = useProductSearch(query, pageSizeReady);
 
   const items = (page?.items ?? []).map((product) => {
-    const stock = stockOverlay[product.id];
+    const stock = stocks[product.id];
     return stock === undefined ? product : { ...product, stock };
   });
 
@@ -113,9 +115,6 @@ export default function CatalogPage() {
 
   return (
     <section className="catalog-page">
-      <Typography.Paragraph type="secondary" className="catalog-page__feed">
-        Stock feed: {stockStatus}
-      </Typography.Paragraph>
       <FiltersBar
         draftSearch={draftSearch}
         filters={filters}
@@ -140,7 +139,7 @@ export default function CatalogPage() {
         <Flex className="catalog-page__pagination" justify="flex-end">
           <Pagination
             current={filters.page}
-            pageSize={filters.pageSize}
+            pageSize={pageSize}
             total={page?.total ?? 0}
             showSizeChanger={false}
             onChange={(nextPage) => updateFilters({ page: nextPage })}

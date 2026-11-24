@@ -8,6 +8,7 @@ import { Button, Card, Col, Flex, Rate, Row, Space, Tag, Typography } from 'antd
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/redux';
 import PageStatus from '../../components/ui/PageStatus/PageStatus';
+import { publicAssetUrl } from '../../domain/catalog';
 import { formatPrice } from '../../domain/money';
 import type { Product, RequestStatus } from '../../domain/types';
 import { friendlyMessage } from '../../services/api/errors';
@@ -88,7 +89,7 @@ export default function ProductPage() {
       {product ? (
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={24} md={12} lg={10} xl={8} xxl={8}>
-            <img className="product-page__image" src={product.imageUrl} alt="" />
+            <img className="product-page__image" src={publicAssetUrl(product.imageUrl)} alt="" />
           </Col>
           <Col xs={24} sm={24} md={12} lg={14} xl={16} xxl={16}>
             <Card className="product-page__card">

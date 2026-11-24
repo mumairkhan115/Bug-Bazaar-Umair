@@ -67,7 +67,7 @@ Use Ant Design `Row` and `Col` for page structure.
 
 Set all six breakpoints on every column. The catalog is a paged grid, 12 cards below `lg` and 24 from `lg` up. Do not mount 5,000 cards and do not add a virtualizer.
 
-The sidebar uses Ant Design's `md` breakpoint. Do not invent widths such as 820px.
+The header uses Ant Design's `md` breakpoint. Below `md`, cart and account are icon buttons. Do not invent widths such as 820px.
 
 ## Media queries
 

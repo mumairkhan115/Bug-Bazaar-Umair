@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Yellow rubber duck">
+  <rect width="400" height="300" fill="#fff4cc"/>
+  <circle cx="214" cy="156" r="108" fill="#ffe38a"/>
+  <ellipse cx="188" cy="214" rx="78" ry="18" fill="#e6c56a"/>
+  <ellipse cx="176" cy="176" rx="72" ry="48" fill="#f5c518"/>
+  <circle cx="236" cy="128" r="38" fill="#f5c518"/>
+  <ellipse cx="274" cy="136" rx="26" ry="14" fill="#e8842a"/>
+  <circle cx="248" cy="120" r="5" fill="#1a2332"/>
+  <circle cx="250" cy="118" r="1.6" fill="#fff"/>
+  <path d="M150 168c18 16 36 18 52 8" fill="none" stroke="#e0ad10" stroke-width="8" stroke-linecap="round"/>
+  <ellipse cx="132" cy="168" rx="16" ry="10" fill="#f0b90f"/>
+</svg>

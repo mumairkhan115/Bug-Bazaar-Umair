@@ -42,6 +42,13 @@ AI drafted a lot of the store: mock API, catalog, cart, auth, hooks, CI, and doc
 - **Changed and why:** GitHub Pages cannot run the Node mock or the stock socket. The production build answers `/api` in the browser and simulates stock ticks, and the app is served from `/Bug-Bazaar-Umair/` with a `404.html` copy so deep links still boot the router.
 - **Mistake caught:** `base` had been nested under Vite `resolve.alias`, so it never set the asset prefix. It belongs on the config root, and only for the Pages build, or `npm run dev` would also move to that subpath.
 
+## Shop shell, drawings, and page size
+
+- **Prompt:** Match the reference shop more closely: category drawings instead of random photos, a header instead of a sidebar, and no `pageSize` in the page URL.
+- **Kept:** Ant Design header, `md` for icon-only actions, 12/24 paging from the `lg` breakpoint, and the products API `pageSize` query. Drawings are local SVGs in `public/gear`, one family per category.
+- **Changed and why:** `docs/UI.md` now describes the header, and `docs/CODING_STANDARDS.md` no longer lists page size as URL state. Page size is the viewport, so writing `?pageSize=24` made every desktop visit look like a filter.
+- **Mistake caught:** The first pass would still fetch 12 items and then 24 once the breakpoint arrived, which flashes the grid. The search waits until `lg` is known. The shell is also a centered column with a footer: logo, quick links, copyright, and the credit line for Muhammad Umair Khan.
+
 ## One thing I would not hand to AI
 
 The 10-minute walkthrough answers: why the token lives in `sessionStorage`, why paging beat virtualization, and what breaks if the idempotency key is dropped. Those have to come from me without reading a generated script.

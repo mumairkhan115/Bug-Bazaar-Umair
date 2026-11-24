@@ -15,9 +15,11 @@ interface Snapshot {
  *
  * React concept: loading is derived when the snapshot key does not match the
  * query. The effect only stores a result, and cleanup aborts the request.
- * Why: a fast search must not paint results for an older query.
+ * Why: a fast search must not paint results for an older query. Pass enabled
+ * false until the viewport page size is known, so the first request is the
+ * page the shopper will see.
  */
-export function useProductSearch(query: ProductQuery) {
+export function useProductSearch(query: ProductQuery, enabled = true) {
   const [attempt, setAttempt] = useState(0);
   const key = `${JSON.stringify(query)}:${attempt}`;
   const [snapshot, setSnapshot] = useState<Snapshot>({
@@ -31,6 +33,10 @@ export function useProductSearch(query: ProductQuery) {
   }, []);
 
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     const controller = new AbortController();
     const requestKey = key;
 
@@ -50,7 +56,7 @@ export function useProductSearch(query: ProductQuery) {
       });
 
     return () => controller.abort();
-  }, [key, query]);
+  }, [enabled, key, query]);
 
   if (snapshot.key !== key) {
     return { status: { state: 'loading' } as RequestStatus, page: null, retry };

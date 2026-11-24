@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Star sticker">
+  <rect width="400" height="300" fill="#e7eefc"/>
+  <circle cx="200" cy="154" r="108" fill="#c9d7f5"/>
+  <rect x="112" y="78" width="176" height="156" rx="28" fill="#fff" stroke="#1a2332" stroke-width="4"/>
+  <polygon points="200,104 216,148 262,148 226,174 240,218 200,192 160,218 174,174 138,148 184,148" fill="#f5c518" stroke="#1a2332" stroke-width="4" stroke-linejoin="round"/>
+</svg>
