@@ -15,6 +15,7 @@ src/hooks          debounce, URL filters, product search, stock feed, Redux hook
 src/services       HTTP client, cache, orders, stock socket, logger
 src/domain         types and the mock contract, shared with the Vite server
 server/mockApi.ts  HTTP and WebSocket adapter for dev and preview
+src/services/api/staticApi.ts  the same contract in the browser for GitHub Pages
 ```
 
 ## Data flow
@@ -41,6 +42,8 @@ Redux is beside that path for the cart and the session. The URL is beside it for
 
 The header badge reads `selectCartCount`. That number is not stored.
 
+Page size is not in the table. The catalog shows 12 cards below `lg` and 24 from `lg` up. That follows the viewport, so the page URL does not include `pageSize`. The products request still sends `pageSize`, because that is the API contract.
+
 ## Patterns
 
 Three patterns show up across the store: an API adapter, custom hooks, and container/presentational split.
@@ -48,6 +51,8 @@ Three patterns show up across the store: an API adapter, custom hooks, and conta
 ### API adapter
 
 `handleApi` in `src/domain/api.ts` is the contract. The Vite middleware is a thin transport. React never imports `handleApi`. Services call `apiRequest`. This keeps status codes and tests in one place.
+
+GitHub Pages only serves files. The Pages build sets `VITE_STATIC_API=true`, and `apiRequest` plus the stock feed then call the same `handleApi` state in the browser. Dev and `vite preview` still use `server/mockApi.ts`.
 
 Why: the PDF allows any mock, and a single adapter is what makes 400, 401, 404, 409, and 500 consistent.
 

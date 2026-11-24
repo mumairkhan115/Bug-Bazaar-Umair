@@ -1,17 +1,50 @@
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
+import type { Plugin } from 'vite';
 import { defineConfig } from 'vitest/config';
 import { bugBazaarApi } from './server/mockApi.ts';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 
+/**
+ * Project sites live under /repo-name/. Local dev stays at /.
+ * Why: an absolute base baked into every dev server would break `npm run dev`.
+ */
+function siteBase(): string {
+  const raw = process.env.VITE_BASE_PATH ?? '/';
+  if (raw === '/' || raw === '') {
+    return '/';
+  }
+  const withLeadingSlash = raw.startsWith('/') ? raw : `/${raw}`;
+  return withLeadingSlash.endsWith('/') ? withLeadingSlash : `${withLeadingSlash}/`;
+}
+
+/**
+ * GitHub Pages has no history fallback. A missing route returns 404.html.
+ * Why: copying the app shell lets the router read the original URL.
+ */
+function pagesSpaFallback(): Plugin {
+  return {
+    name: 'pages-spa-fallback',
+    apply: 'build',
+    closeBundle() {
+      const indexFile = path.resolve(root, 'dist/index.html');
+      if (!fs.existsSync(indexFile)) {
+        return;
+      }
+      fs.copyFileSync(indexFile, path.resolve(root, 'dist/404.html'));
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), bugBazaarApi()],
+  base: siteBase(),
+  plugins: [react(), bugBazaarApi(), pagesSpaFallback()],
   resolve: {
     alias: {
       '@': path.resolve(root, 'src'),
-      base: '/Bug-Bazaar-Umair/',
     },
   },
   css: {

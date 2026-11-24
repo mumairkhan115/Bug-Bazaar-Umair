@@ -23,14 +23,8 @@ const theme = {
     },
     Layout: {
       headerBg: colors.bg,
-      siderBg: colors.bg,
       bodyBg: colors.bgLayout,
-      triggerBg: colors.bgLayout,
-      triggerColor: colors.text,
-    },
-    Menu: {
-      itemSelectedBg: 'rgb(194 24 91 / 12%)',
-      itemSelectedColor: colors.primary,
+      footerBg: colors.bg,
     },
     Card: {
       colorBorderSecondary: colors.border,

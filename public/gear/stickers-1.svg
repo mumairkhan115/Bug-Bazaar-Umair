@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Round bug sticker">
+  <rect width="400" height="300" fill="#fde7ef"/>
+  <circle cx="200" cy="156" r="108" fill="#f8c9d8"/>
+  <circle cx="200" cy="156" r="78" fill="#fff" stroke="#1a2332" stroke-width="4"/>
+  <circle cx="200" cy="168" r="36" fill="#c2185b" stroke="#1a2332" stroke-width="4"/>
+  <circle cx="176" cy="132" r="16" fill="#1a2332"/>
+  <circle cx="224" cy="132" r="16" fill="#1a2332"/>
+  <circle cx="180" cy="128" r="4" fill="#fff"/>
+  <circle cx="228" cy="128" r="4" fill="#fff"/>
+  <path d="M168 112c-10-18-8-28 2-36" fill="none" stroke="#1a2332" stroke-width="3" stroke-linecap="round"/>
+  <path d="M232 112c10-18 8-28-2-36" fill="none" stroke="#1a2332" stroke-width="3" stroke-linecap="round"/>
+  <path d="M164 168h-28M236 168h28M172 190l-22 16M228 190l22 16" fill="none" stroke="#1a2332" stroke-width="3" stroke-linecap="round"/>
+</svg>

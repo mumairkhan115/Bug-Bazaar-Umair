@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Bag of coffee">
+  <rect width="400" height="300" fill="#f3e6d4"/>
+  <circle cx="200" cy="156" r="108" fill="#e4c8a4"/>
+  <path d="M138 86h124l18 28v112a16 16 0 0 1-16 16H136a16 16 0 0 1-16-16V114z" fill="#6f4e37"/>
+  <path d="M138 86l22 28h80l22-28" fill="#8d6e63"/>
+  <rect x="156" y="140" width="88" height="64" rx="8" fill="#f6efe6"/>
+  <circle cx="186" cy="166" r="8" fill="#6f4e37"/>
+  <circle cx="214" cy="178" r="8" fill="#6f4e37"/>
+  <path d="M176 190h48" stroke="#6f4e37" stroke-width="4" stroke-linecap="round"/>
+</svg>

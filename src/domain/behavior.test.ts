@@ -14,7 +14,7 @@ import cartReducer, {
   selectCartCount,
   selectCartSubtotal,
 } from '../features/cart/cartSlice';
-import { parseFilters } from '../hooks/useUrlFilters';
+import { filtersToSearchParams, parseFilters } from '../hooks/useUrlFilters';
 import { colorVariables } from '../config/tokens';
 
 const sample = {
@@ -70,14 +70,41 @@ describe('catalog rules', () => {
     const filters = parseFilters(
       new URLSearchParams('search=duck&category=ducks&inStock=1&sort=rating&page=2&pageSize=24'),
     );
-    expect(filters).toMatchObject({
+    expect(filters).toEqual({
       search: 'duck',
       category: 'ducks',
       inStock: true,
       sort: 'rating',
       page: 2,
-      pageSize: 24,
+      fault: '',
     });
+  });
+
+  it('leaves page size out of the page URL', () => {
+    const params = filtersToSearchParams({
+      search: 'duck',
+      category: 'ducks',
+      inStock: true,
+      sort: 'rating',
+      page: 2,
+      fault: '',
+    });
+    expect(params.has('pageSize')).toBe(false);
+    expect(params.get('page')).toBe('2');
+  });
+
+  it('gives each category its own drawing', () => {
+    const byCategory = {
+      keyboards: products.find((product) => product.category === 'keyboards'),
+      ducks: products.find((product) => product.category === 'ducks'),
+      coffee: products.find((product) => product.category === 'coffee'),
+      stickers: products.find((product) => product.category === 'stickers'),
+    };
+    expect(byCategory.keyboards?.imageUrl).toMatch(/gear\/keyboards-[123]\.svg$/);
+    expect(byCategory.ducks?.imageUrl).toMatch(/gear\/ducks-[123]\.svg$/);
+    expect(byCategory.coffee?.imageUrl).toMatch(/gear\/coffee-[123]\.svg$/);
+    expect(byCategory.stickers?.imageUrl).toMatch(/gear\/stickers-[123]\.svg$/);
+    expect(products.every((product) => !product.imageUrl.includes('picsum'))).toBe(true);
   });
 });
 

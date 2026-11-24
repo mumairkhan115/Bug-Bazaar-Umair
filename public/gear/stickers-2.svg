@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Sheet of stickers">
+  <rect width="400" height="300" fill="#fff4cc"/>
+  <circle cx="200" cy="156" r="108" fill="#ffe38a"/>
+  <rect x="78" y="72" width="244" height="164" rx="18" fill="#fff" stroke="#1a2332" stroke-width="4"/>
+  <circle cx="140" cy="128" r="32" fill="#c2185b" stroke="#1a2332" stroke-width="3"/>
+  <rect x="190" y="98" width="78" height="60" rx="10" fill="#f5c518" stroke="#1a2332" stroke-width="3"/>
+  <polygon points="248,168 262,198 232,180 264,180 234,198" fill="#4ea1ff" stroke="#1a2332" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="150" cy="196" rx="36" ry="18" fill="#7dcea0" stroke="#1a2332" stroke-width="3"/>
+</svg>

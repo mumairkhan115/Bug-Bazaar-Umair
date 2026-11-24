@@ -31,7 +31,7 @@ export function createCatalog(): Product[] {
       category,
       stock: index % 19 === 0 ? 0 : (index % 12) + 1,
       rating: (index % 5) + 1,
-      imageUrl: `https://picsum.photos/seed/bugbazaar-${id}/400/300`,
+      imageUrl: gearImage(category, index),
     };
   });
 }
@@ -66,6 +66,19 @@ export function queryProducts(products: readonly Product[], query: ProductQuery)
     items: sorted.slice(start, start + query.pageSize),
     total: sorted.length,
   };
+}
+
+/**
+ * Picks a stable drawing for one product.
+ *
+ * JavaScript concept: the index modulo the variant count never changes.
+ * Why: dummy rows still show a duck, keyboard, cup, or sticker, and a
+ * refresh does not swap the picture. The path stays relative because this
+ * catalog is built before Vite knows the site base.
+ */
+function gearImage(category: Category, index: number): string {
+  const variant = (index % 3) + 1;
+  return `gear/${category}-${variant}.svg`;
 }
 
 function compareProducts(left: Product, right: Product, sort: SortKey): number {
