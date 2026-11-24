@@ -15,7 +15,8 @@ src/hooks          debounce, URL filters, product search, stock feed, Redux hook
 src/services       HTTP client, cache, orders, stock socket, logger
 src/domain         types and the mock contract, shared with the Vite server
 server/mockApi.ts  HTTP and WebSocket adapter for dev and preview
-src/services/api/staticApi.ts  the same contract in the browser for GitHub Pages
+src/sw.ts          GitHub Pages service worker for /api and live stock
+src/services/api/staticApi.ts  in-memory fallback when the worker does not control the page
 ```
 
 ## Data flow
@@ -52,7 +53,7 @@ Three patterns show up across the store: an API adapter, custom hooks, and conta
 
 `handleApi` in `src/domain/api.ts` is the contract. The Vite middleware is a thin transport. React never imports `handleApi`. Services call `apiRequest`. This keeps status codes and tests in one place.
 
-GitHub Pages only serves files. The Pages build sets `VITE_STATIC_API=true`, and `apiRequest` plus the stock feed then call the same `handleApi` state in the browser. Dev and `vite preview` still use `server/mockApi.ts`.
+GitHub Pages only serves files. The Pages build sets `VITE_STATIC_API=true`. `prepareStaticApi` registers `sw.js` before the first paint, and `apiRequest` fetches `/<base>/api/...`. The worker runs `handleApi`, so those requests return the contract instead of a 404. Stock uses a broadcast channel because Pages cannot upgrade a WebSocket. If the worker does not take control, the page uses the same contract in memory. Dev and `vite preview` still use `server/mockApi.ts`.
 
 Why: the PDF allows any mock, and a single adapter is what makes 400, 401, 404, 409, and 500 consistent.
 

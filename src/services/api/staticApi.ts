@@ -1,5 +1,7 @@
 import { handleApi, type ApiCall, type ApiResult, type MockState } from '../../domain/api';
 import { createCatalog } from '../../domain/catalog';
+import { tickVisibleStock } from '../../domain/stockTick';
+import { getWatchedProducts } from '../stock/watchList';
 
 let state: MockState | undefined;
 
@@ -24,23 +26,10 @@ export function callStaticApi(call: ApiCall): ApiResult {
 }
 
 /**
- * Moves one product's stock the same way the dev socket does.
+ * Moves one visible product the same way the dev socket does.
  *
- * Why: the public site has no WebSocket server, but product pages still expect live updates.
+ * Why: the memory fallback has no WebSocket, and the open page still expects live stock.
  */
 export function tickStaticStock(): { productId: string; stock: number } | undefined {
-  const products = memory().products;
-  if (products.length === 0) {
-    return undefined;
-  }
-  const index =
-    Math.random() < 0.75
-      ? Math.floor(Math.random() * Math.min(24, products.length))
-      : Math.floor(Math.random() * products.length);
-  const product = products[index];
-  if (!product) {
-    return undefined;
-  }
-  product.stock = Math.floor(Math.random() * 15);
-  return { productId: product.id, stock: product.stock };
+  return tickVisibleStock(memory().products, getWatchedProducts());
 }

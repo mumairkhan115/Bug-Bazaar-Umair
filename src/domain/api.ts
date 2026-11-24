@@ -140,6 +140,22 @@ export function handleApi(state: MockState, call: ApiCall): ApiResult {
   return { status: 404, delayMs: 0, body: errorBody('not_found', 'Route not found') };
 }
 
+/**
+ * Turns a hosted path into a contract path.
+ *
+ * JavaScript concept: only a leading `/api/` or `/<site>/api/` counts.
+ * Why: `/src/services/api/mode.ts` also contains `/api/`. Treating that as
+ * the contract made the dev server return 404 for the module and left a blank page.
+ * `/Bug-Bazaar-Umair/api/products` still matches `GET /api/products`.
+ */
+export function toApiPath(pathname: string): string | undefined {
+  if (pathname.startsWith('/api/')) {
+    return pathname;
+  }
+  const nested = /^\/[^/]+(\/api\/.*)$/.exec(pathname);
+  return nested?.[1];
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }

@@ -7,6 +7,7 @@ import type { Product, ProductQuery } from '../../domain/types';
 import { useDebouncedValue } from '../../hooks/useDebouncedValue';
 import { useProductSearch } from '../../hooks/useProductSearch';
 import { useUrlFilters } from '../../hooks/useUrlFilters';
+import { useWatchStock } from '../../hooks/useWatchStock';
 import { addItem } from '../cart/cartSlice';
 import FiltersBar from './FiltersBar';
 import ProductCard from './ProductCard';
@@ -89,6 +90,7 @@ export default function CatalogPage() {
     const stock = stocks[product.id];
     return stock === undefined ? product : { ...product, stock };
   });
+  useWatchStock(items.map((product) => product.id));
 
   const handleAdd = (product: Product) => {
     dispatch(
