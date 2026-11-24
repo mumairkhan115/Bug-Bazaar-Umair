@@ -35,6 +35,15 @@ AI drafted a lot of the store: mock API, catalog, cart, auth, hooks, CI, and doc
 
 ---
 
+## Stock feed and Pages API paths
+
+- **Prompt:** Stock numbers were not changing, and the deployed site showed `/api` as 404.
+- **Kept:** The dev WebSocket, reconnect backoff, and cleanup on unmount.
+- **Changed and why:** The tick was choosing product ids 1–24 from the unsorted catalog, which are not the name-sorted first page, so the grid never moved. Ticks now follow the products on screen. GitHub Pages requests were aimed at the domain root (`/<user>.github.io/api`), which skips `/Bug-Bazaar-Umair/` and 404s. The Pages build now fetches `/Bug-Bazaar-Umair/api/...` and a service worker answers that path. The dev server is unchanged.
+- **Mistake caught:** A first pass only rewrote the fetch URL. That still 404s, because Pages has no API process. The worker is what returns the contract.
+
+---
+
 ## One thing I would not hand to AI
 
 The 10-minute walkthrough answers: why the token lives in `sessionStorage`, why paging beat virtualization, and what breaks if the idempotency key is dropped. Those have to come from me without reading a generated script.

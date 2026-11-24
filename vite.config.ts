@@ -42,6 +42,19 @@ function pagesSpaFallback(): Plugin {
 export default defineConfig({
   base: siteBase(),
   plugins: [react(), bugBazaarApi(), pagesSpaFallback()],
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(root, 'index.html'),
+        sw: path.resolve(root, 'src/sw.ts'),
+      },
+      output: {
+        entryFileNames(chunk) {
+          return chunk.name === 'sw' ? 'sw.js' : 'assets/[name]-[hash].js';
+        },
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(root, 'src'),

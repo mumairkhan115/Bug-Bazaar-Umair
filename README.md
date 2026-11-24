@@ -24,6 +24,8 @@ Copy `.env.example` to `.env` only if you need to override the API origin. The d
 
 `VITE_API_BASE_URL` is optional. Leave it empty for local development.
 
+GitHub Pages has no API process. The production build registers a service worker that answers `/<repository>/api/...`. A request to `https://<user>.github.io/api/...` skips the repository folder and returns 404. Local `npm run dev` keeps `/api` on the Vite server. The Pages workflow sets `VITE_BASE_PATH` and `VITE_STATIC_API=true`.
+
 ## Scripts
 
 | Script                 | Result                                     |

@@ -69,3 +69,7 @@ Screens must not render `error.message`. They use `friendlyMessage` or field `de
 ## WebSocket
 
 `/api/stock` sends `{ productId, stock }` about every 4 seconds.
+
+The browser may send `{ productIds: string[] }` so the next tick changes a product on the open page. With no list, the tick uses the first name-sorted page.
+
+GitHub Pages has no socket server. The same HTTP paths are requested under the site base (`/Bug-Bazaar-Umair/api/...`) and answered by `sw.js`. A request to `https://<user>.github.io/api/...` skips that folder and returns 404. The worker pushes stock on a broadcast channel and stops when no tab is open.

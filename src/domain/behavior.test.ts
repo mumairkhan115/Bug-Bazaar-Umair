@@ -2,7 +2,9 @@ import { readFileSync } from 'node:fs';
 import { configureStore } from '@reduxjs/toolkit';
 import { describe, expect, it } from 'vitest';
 import { createCatalog, delayFor, queryProducts } from '../domain/catalog';
-import { handleApi } from '../domain/api';
+import { handleApi, toApiPath } from '../domain/api';
+import { readWatchIds, tickVisibleStock } from '../domain/stockTick';
+import { joinBasePath } from '../services/api/mode';
 import { formatPrice } from '../domain/money';
 import { placeOrder } from '../domain/orders';
 import { friendlyMessage, ApiRequestError } from '../services/api/errors';
@@ -105,6 +107,41 @@ describe('catalog rules', () => {
     expect(byCategory.coffee?.imageUrl).toMatch(/gear\/coffee-[123]\.svg$/);
     expect(byCategory.stickers?.imageUrl).toMatch(/gear\/stickers-[123]\.svg$/);
     expect(products.every((product) => !product.imageUrl.includes('picsum'))).toBe(true);
+  });
+});
+
+describe('live stock and api paths', () => {
+  const products = createCatalog();
+  const firstPage = queryProducts(products, {
+    search: '',
+    category: '',
+    inStock: false,
+    sort: 'name',
+    page: 1,
+    pageSize: 24,
+  });
+
+  it('changes a product on the first page when nothing is watched', () => {
+    const update = tickVisibleStock(products, []);
+    expect(firstPage.items.some((item) => item.id === update?.productId)).toBe(true);
+  });
+
+  it('changes the product the page is showing', () => {
+    const target = products.find((product) => product.id === '4000');
+    const before = target?.stock ?? 0;
+    const update = tickVisibleStock(products, ['4000']);
+    expect(update).toEqual({ productId: '4000', stock: (before + 1) % 12 });
+  });
+
+  it('keeps contract paths under the repository base', () => {
+    expect(toApiPath('/Bug-Bazaar-Umair/api/products')).toBe('/api/products');
+    expect(toApiPath('/api/stock')).toBe('/api/stock');
+    expect(toApiPath('/src/services/api/mode.ts')).toBeUndefined();
+    expect(toApiPath('/cart')).toBeUndefined();
+    expect(
+      joinBasePath('https://mumairkhan115.github.io', '/Bug-Bazaar-Umair/', '/api/products?page=1'),
+    ).toBe('https://mumairkhan115.github.io/Bug-Bazaar-Umair/api/products?page=1');
+    expect(readWatchIds({ productIds: ['4', 2] })).toEqual(['4']);
   });
 });
 

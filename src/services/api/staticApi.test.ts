@@ -14,11 +14,17 @@ describe('staticApi', () => {
     expect(result.body).toMatchObject({ total: 5000 });
   });
 
-  it('changes a product stock value', () => {
+  it('changes a product on the first page', () => {
     const update = tickStaticStock();
+    const result = callStaticApi({
+      method: 'GET',
+      pathname: '/api/products',
+      searchParams: new URLSearchParams('sort=name&page=1&pageSize=24'),
+      body: undefined,
+    });
+    const body = result.body as { items: { id: string; stock: number }[] };
+    const match = body.items.find((item) => item.id === update?.productId);
 
-    expect(update?.productId).toMatch(/^\d+$/);
-    expect(update?.stock).toBeGreaterThanOrEqual(0);
-    expect(update?.stock).toBeLessThan(15);
+    expect(match?.stock).toBe(update?.stock);
   });
 });

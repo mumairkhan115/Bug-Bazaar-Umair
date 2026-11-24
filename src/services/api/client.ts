@@ -1,5 +1,6 @@
 import { readCache, writeCache } from './cache';
 import { ApiRequestError, toApiRequestError } from './errors';
+import { staticApiUrl, staticTransport, usesStaticApi } from './mode';
 
 type UnauthorizedHandler = () => void;
 
@@ -61,15 +62,14 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     headers['Content-Type'] = 'application/json';
   }
 
-  const response =
-    import.meta.env.VITE_STATIC_API === 'true'
-      ? await staticResponse(path, method, options, headers)
-      : await fetch(`${apiBase()}${path}`, {
-          method,
-          headers,
-          body: options.body === undefined ? undefined : JSON.stringify(options.body),
-          signal: options.signal,
-        });
+  const response = usesStaticApi()
+    ? await staticResponse(path, method, options, headers)
+    : await fetch(`${apiBase()}${path}`, {
+        method,
+        headers,
+        body: options.body === undefined ? undefined : JSON.stringify(options.body),
+        signal: options.signal,
+      });
 
   if (response.status === 401) {
     handleUnauthorized();
@@ -102,6 +102,16 @@ async function staticResponse(
   options: RequestOptions,
   headers: Record<string, string>,
 ): Promise<Response> {
+  if (staticTransport() === 'worker') {
+    return fetch(staticApiUrl(path), {
+      method,
+      headers,
+      body: options.body === undefined ? undefined : JSON.stringify(options.body),
+      signal: options.signal,
+      cache: 'no-store',
+    });
+  }
+
   const url = new URL(path, 'http://localhost');
   const { callStaticApi } = await import('./staticApi');
   const result = callStaticApi({

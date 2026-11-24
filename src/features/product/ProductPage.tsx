@@ -11,6 +11,8 @@ import PageStatus from '../../components/ui/PageStatus/PageStatus';
 import { publicAssetUrl } from '../../config/publicAsset';
 import { formatPrice } from '../../domain/money';
 import type { Product, RequestStatus } from '../../domain/types';
+import { useLiveStock } from '../../components/ui/AppLayout/liveStockContext';
+import { useWatchStock } from '../../hooks/useWatchStock';
 import { friendlyMessage } from '../../services/api/errors';
 import { isAbortError } from '../../services/api/client';
 import { getProduct } from '../../services/api/products';
@@ -36,7 +38,10 @@ export default function ProductPage() {
   }>({ key: '', status: { state: 'idle' }, product: null });
   const [showBackToTop, setShowBackToTop] = useState(false);
   const status = snapshot.key === requestKey ? snapshot.status : { state: 'loading' as const };
-  const product = snapshot.key === requestKey ? snapshot.product : null;
+  const loaded = snapshot.key === requestKey ? snapshot.product : null;
+  const { stocks } = useLiveStock();
+  const product = loaded ? { ...loaded, stock: stocks[loaded.id] ?? loaded.stock } : null;
+  useWatchStock(product ? [product.id] : []);
 
   useEffect(() => {
     const controller = new AbortController();

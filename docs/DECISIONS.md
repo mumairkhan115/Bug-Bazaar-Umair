@@ -20,6 +20,8 @@ Considered `redux-persist`. Rejected. One cart slice and one session slice do no
 
 Live stock uses a WebSocket on the Vite server. Polling and server-sent events would also work. The socket was chosen because the lesson has to show connect, reconnect, and stop-on-unmount. Polling would hide the cleanup.
 
+GitHub Pages cannot upgrade a socket, and a request to `https://<user>.github.io/api/...` 404s because the site lives under the repository path. The Pages build registers a service worker at that base path. The worker answers the same contract and pushes stock on a broadcast channel. The dev server stays on the socket.
+
 ## Token in sessionStorage
 
 See `docs/AUTH.md`.
