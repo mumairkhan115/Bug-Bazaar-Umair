@@ -81,21 +81,6 @@ function gearImage(category: Category, index: number): string {
   return `gear/${category}-${variant}.svg`;
 }
 
-/**
- * Turns a public-folder path into a URL for this deployment.
- *
- * Why: GitHub Pages serves the app from a subpath. Call this when rendering,
- * not while seeding the catalog.
- */
-export function publicAssetUrl(path: string): string {
-  if (path.startsWith('http://') || path.startsWith('https://')) {
-    return path;
-  }
-  const base = import.meta.env?.BASE_URL ?? '/';
-  const normalized = path.startsWith('/') ? path.slice(1) : path;
-  return `${base}${normalized}`;
-}
-
 function compareProducts(left: Product, right: Product, sort: SortKey): number {
   switch (sort) {
     case 'price-asc':

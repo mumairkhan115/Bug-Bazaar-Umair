@@ -8,7 +8,7 @@ import { Button, Card, Col, Flex, Rate, Row, Space, Tag, Typography } from 'antd
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/redux';
 import PageStatus from '../../components/ui/PageStatus/PageStatus';
-import { publicAssetUrl } from '../../domain/catalog';
+import { publicAssetUrl } from '../../config/publicAsset';
 import { formatPrice } from '../../domain/money';
 import type { Product, RequestStatus } from '../../domain/types';
 import { friendlyMessage } from '../../services/api/errors';

@@ -1,7 +1,7 @@
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Card, Flex, Rate, Tag, Typography } from 'antd';
 import { Link } from 'react-router-dom';
-import { publicAssetUrl } from '../../domain/catalog';
+import { publicAssetUrl } from '../../config/publicAsset';
 import { formatPrice } from '../../domain/money';
 import type { Product } from '../../domain/types';
 import './ProductCard.scss';
