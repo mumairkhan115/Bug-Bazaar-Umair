@@ -1,5 +1,5 @@
 import { queryProducts } from './catalog.ts';
-import type { Product } from './types.ts';
+import { defaultSort, type Product } from './types.ts';
 
 export const stockChannelName = 'bug-bazaar-stock';
 
@@ -45,7 +45,7 @@ export function tickVisibleStock(
           search: '',
           category: '',
           inStock: false,
-          sort: 'name',
+          sort: defaultSort,
           page: 1,
           pageSize: 24,
         }).items;

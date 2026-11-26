@@ -1,5 +1,5 @@
 import type { Category, Product, ProductPage, ProductQuery, SortKey } from './types.ts';
-import { categories, sortKeys } from './types.ts';
+import { categories, defaultSort, sortKeys } from './types.ts';
 
 const adjectives = ['Clicky', 'Quiet', 'Sunny', 'Midnight', 'Amber', 'Moss', 'Bold', 'Tiny'];
 
@@ -112,7 +112,7 @@ export function parseProductQuery(params: URLSearchParams): ProductQuery {
     search: params.get('search') ?? '',
     category: isCategory(categoryParam) ? categoryParam : '',
     inStock: params.get('inStock') === '1',
-    sort: isSortKey(sortParam) ? sortParam : 'name',
+    sort: isSortKey(sortParam) ? sortParam : defaultSort,
     page: Number.isFinite(page) && page > 0 ? Math.floor(page) : 1,
     pageSize,
   };

@@ -3,7 +3,7 @@ import { Col, Flex, Grid, Pagination, Row } from 'antd';
 import { useAppDispatch } from '../../hooks/redux';
 import { useLiveStock } from '../../components/ui/AppLayout/liveStockContext';
 import PageStatus from '../../components/ui/PageStatus/PageStatus';
-import type { Product, ProductQuery } from '../../domain/types';
+import { defaultSort, type Product, type ProductQuery } from '../../domain/types';
 import { useDebouncedValue } from '../../hooks/useDebouncedValue';
 import { useProductSearch } from '../../hooks/useProductSearch';
 import { useUrlFilters } from '../../hooks/useUrlFilters';
@@ -109,7 +109,7 @@ export default function CatalogPage() {
       search: '',
       category: '',
       inStock: false,
-      sort: 'name',
+      sort: defaultSort,
       page: 1,
       fault: '',
     });

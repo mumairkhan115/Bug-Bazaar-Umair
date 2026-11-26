@@ -6,7 +6,7 @@ Prices are integer cents. The mock is `server/mockApi.ts` calling `handleApi`. S
 
 ### GET /api/products
 
-Query: `search`, `category` (`keyboards`, `ducks`, `coffee`, `stickers`), `inStock=1`, `sort` (`name`, `price-asc`, `price-desc`, `rating`), `page`, `pageSize` (`12` or `24`), `delay=1`.
+Query: `search`, `category` (`keyboards`, `ducks`, `coffee`, `stickers`), `inStock=1`, `sort` (`name`, `price-asc`, `price-desc`, `rating`; omitted means `rating`, highest first), `page`, `pageSize` (`12` or `24`), `delay=1`.
 
 - 200 `{ items: Product[], total: number }`
 - 500 when `search=__error_500`

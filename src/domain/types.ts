@@ -6,6 +6,9 @@ export const sortKeys = ['name', 'price-asc', 'price-desc', 'rating'] as const;
 
 export type SortKey = (typeof sortKeys)[number];
 
+/** Highest rating first. Left out of the page URL. */
+export const defaultSort = 'rating' as const satisfies SortKey;
+
 /** Prices are integer cents so the client never does decimal money math. */
 export interface Product {
   id: string;
