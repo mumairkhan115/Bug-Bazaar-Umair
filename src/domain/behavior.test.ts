@@ -68,6 +68,19 @@ describe('catalog rules', () => {
     expect(delayFor('a')).toBeGreaterThan(delayFor('keyboard'));
   });
 
+  it('defaults an empty catalog URL to rating order', () => {
+    expect(parseFilters(new URLSearchParams()).sort).toBe('rating');
+    const params = filtersToSearchParams({
+      search: '',
+      category: '',
+      inStock: false,
+      sort: 'rating',
+      page: 1,
+      fault: '',
+    });
+    expect(params.has('sort')).toBe(false);
+  });
+
   it('reads filters from the query string', () => {
     const filters = parseFilters(
       new URLSearchParams('search=duck&category=ducks&inStock=1&sort=rating&page=2&pageSize=24'),
@@ -92,6 +105,7 @@ describe('catalog rules', () => {
       fault: '',
     });
     expect(params.has('pageSize')).toBe(false);
+    expect(params.has('sort')).toBe(false);
     expect(params.get('page')).toBe('2');
   });
 
@@ -116,7 +130,7 @@ describe('live stock and api paths', () => {
     search: '',
     category: '',
     inStock: false,
-    sort: 'name',
+    sort: 'rating',
     page: 1,
     pageSize: 24,
   });

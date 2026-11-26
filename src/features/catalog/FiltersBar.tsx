@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ClearOutlined, FilterOutlined } from '@ant-design/icons';
 import { Alert, Badge, Button, Drawer, Flex, Input, Select, Space, Switch, Typography } from 'antd';
-import { categories } from '../../domain/types';
+import { categories, defaultSort } from '../../domain/types';
 import type { FaultMode, UrlFilters } from '../../hooks/useUrlFilters';
 import './FiltersBar.scss';
 
@@ -20,10 +20,10 @@ const categoryOptions = [
 ];
 
 const sortOptions = [
+  { value: 'rating', label: 'Rating' },
   { value: 'name', label: 'Name' },
   { value: 'price-asc', label: 'Price: low to high' },
   { value: 'price-desc', label: 'Price: high to low' },
-  { value: 'rating', label: 'Rating' },
 ];
 
 const faultOptions: { value: FaultMode; label: string }[] = [
@@ -40,7 +40,7 @@ function activeFilterCount(filters: UrlFilters): number {
   if (filters.inStock) {
     count += 1;
   }
-  if (filters.sort !== 'name') {
+  if (filters.sort !== defaultSort) {
     count += 1;
   }
   if (filters.fault) {

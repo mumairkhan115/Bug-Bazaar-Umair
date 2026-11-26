@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { isCategory, isSortKey } from '../domain/catalog';
-import type { Category, SortKey } from '../domain/types';
+import { defaultSort, type Category, type SortKey } from '../domain/types';
 
 export type FaultMode = '' | '500' | 'empty';
 
@@ -58,7 +58,7 @@ export function parseFilters(params: URLSearchParams): UrlFilters {
     search: params.get('search') ?? '',
     category: isCategory(category) ? category : '',
     inStock: params.get('inStock') === '1',
-    sort: isSortKey(sort) ? sort : 'name',
+    sort: isSortKey(sort) ? sort : defaultSort,
     page: Number.isFinite(page) && page > 0 ? Math.floor(page) : 1,
     fault: parseFault(params.get('fault')),
   };
@@ -75,7 +75,7 @@ export function filtersToSearchParams(filters: UrlFilters): URLSearchParams {
   if (filters.inStock) {
     params.set('inStock', '1');
   }
-  if (filters.sort !== 'name') {
+  if (filters.sort !== defaultSort) {
     params.set('sort', filters.sort);
   }
   if (filters.page !== 1) {
