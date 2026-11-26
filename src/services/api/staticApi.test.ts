@@ -19,7 +19,7 @@ describe('staticApi', () => {
     const result = callStaticApi({
       method: 'GET',
       pathname: '/api/products',
-      searchParams: new URLSearchParams('sort=name&page=1&pageSize=24'),
+      searchParams: new URLSearchParams('sort=rating&page=1&pageSize=24'),
       body: undefined,
     });
     const body = result.body as { items: { id: string; stock: number }[] };
