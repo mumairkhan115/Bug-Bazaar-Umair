@@ -3,7 +3,28 @@ import { defaultSort, type Product } from './types.ts';
 
 export const stockChannelName = 'bug-bazaar-stock';
 
+/**
+ * How often local and deployed stock each take one step.
+ *
+ * Why: one interval keeps the Vite socket and the Pages page on the same cadence.
+ */
+export const stockTickGapMs = 1000;
+
+/**
+ * Shortest gap the Pages worker will publish.
+ *
+ * Why: the page asks on `stockTickGapMs`, and a second tab can ask in between.
+ * Timer drift is a few hundred milliseconds, so this sits just under the page
+ * interval and still drops a stacked request.
+ */
+export const stockTickMinGapMs = stockTickGapMs - 200;
+
 let cursor = 0;
+
+export interface StockTickRequest {
+  type: 'stock-tick';
+  productIds: string[];
+}
 
 /**
  * Reads a watch list from a socket or broadcast message.
@@ -20,6 +41,49 @@ export function readWatchIds(value: unknown): string[] | undefined {
     return undefined;
   }
   return ids.filter((id): id is string => typeof id === 'string');
+}
+
+/**
+ * Builds the message a page sends to wake the Pages worker.
+ *
+ * Why: the worker owns the catalog, and the visible ids have to travel with
+ * the wake-up. A restarted worker has forgotten which cards are on screen.
+ */
+export function stockTickRequest(productIds: readonly string[]): StockTickRequest {
+  return { type: 'stock-tick', productIds: [...productIds] };
+}
+
+/**
+ * Reads a wake-up message from the page.
+ *
+ * Why: a watch-list broadcast is not a tick. Only this message should move stock.
+ */
+export function readStockTickRequest(value: unknown): StockTickRequest | undefined {
+  if (typeof value !== 'object' || value === null) {
+    return undefined;
+  }
+  if ((value as { type?: unknown }).type !== 'stock-tick') {
+    return undefined;
+  }
+  const productIds = readWatchIds(value);
+  if (!productIds) {
+    return undefined;
+  }
+  return { type: 'stock-tick', productIds };
+}
+
+/**
+ * Decides whether this wake-up is far enough from the previous one.
+ *
+ * JavaScript concept: `Date.now()` differences absorb clock drift between tabs.
+ * Why: two open tabs must not step the same product twice as fast.
+ */
+export function shouldPublishTick(
+  now: number,
+  lastTickAt: number,
+  gap = stockTickMinGapMs,
+): boolean {
+  return now - lastTickAt >= gap;
 }
 
 /**

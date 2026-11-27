@@ -1,18 +1,24 @@
 import { createCatalog } from './domain/catalog';
 import { handleApi, toApiPath, type MockState } from './domain/api';
-import { readWatchIds, stockChannelName, tickVisibleStock } from './domain/stockTick';
+import {
+  readStockTickRequest,
+  readWatchIds,
+  shouldPublishTick,
+  stockChannelName,
+  tickVisibleStock,
+} from './domain/stockTick';
 
 /**
  * Answers the API contract on GitHub Pages.
  *
  * Why: Pages only serves files. A request for `/api/products` at the domain
  * root is 404. This worker owns one catalog and responds under the site base.
- * The interval stops when no tab is open, which is the "stop when the page closes" rule.
+ * A service worker timer does not keep the worker alive, so a closed tab
+ * simply stops asking for the next stock step.
  */
 
 interface WorkerClients {
   claim: () => Promise<void>;
-  matchAll: () => Promise<unknown[]>;
 }
 
 interface WorkerScope {
@@ -27,6 +33,10 @@ interface FetchWorkerEvent extends Event {
   waitUntil: (promise: Promise<unknown>) => void;
 }
 
+interface MessageWorkerEvent extends Event {
+  data: unknown;
+}
+
 const scope = globalThis as unknown as WorkerScope;
 const state: MockState = {
   products: createCatalog(),
@@ -35,17 +45,28 @@ const state: MockState = {
 };
 const channel = new BroadcastChannel(stockChannelName);
 let watched: string[] = [];
+let lastTickAt = 0;
 
 channel.addEventListener('message', (event) => {
-  const ids = readWatchIds(event.data);
+  const ids = readWatchIds((event as MessageWorkerEvent).data);
   if (ids) {
     watched = ids;
   }
 });
 
-setInterval(() => {
-  void publishTick();
-}, 4000);
+scope.addEventListener('message', (event) => {
+  const tick = readStockTickRequest((event as MessageWorkerEvent).data);
+  if (!tick) {
+    return;
+  }
+  watched = tick.productIds;
+  const now = Date.now();
+  if (!shouldPublishTick(now, lastTickAt)) {
+    return;
+  }
+  lastTickAt = now;
+  publishTick();
+});
 
 scope.addEventListener('install', () => {
   scope.skipWaiting();
@@ -64,11 +85,7 @@ scope.addEventListener('fetch', (event) => {
   fetchEvent.respondWith(answer(fetchEvent.request, pathname));
 });
 
-async function publishTick(): Promise<void> {
-  const clients = await scope.clients.matchAll();
-  if (clients.length === 0) {
-    return;
-  }
+function publishTick(): void {
   const update = tickVisibleStock(state.products, watched);
   if (update) {
     channel.postMessage(update);
