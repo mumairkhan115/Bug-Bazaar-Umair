@@ -4,7 +4,7 @@ import { WebSocketServer, type WebSocket } from 'ws';
 import type { Plugin, PreviewServer, ViteDevServer } from 'vite';
 import { createCatalog } from '../src/domain/catalog.ts';
 import { handleApi, toApiPath, type MockState } from '../src/domain/api.ts';
-import { readWatchIds, tickVisibleStock } from '../src/domain/stockTick.ts';
+import { readWatchIds, stockTickGapMs, tickVisibleStock } from '../src/domain/stockTick.ts';
 
 interface UpgradeServer {
   on(
@@ -176,7 +176,7 @@ function attachStockSocket(httpServer: UpgradeServer, products: MockState['produ
         client.send(payload);
       }
     }
-  }, 4000);
+  }, stockTickGapMs);
 
   httpServer.on('close', () => {
     clearInterval(timer);

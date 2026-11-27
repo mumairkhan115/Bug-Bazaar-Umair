@@ -3,7 +3,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import { describe, expect, it } from 'vitest';
 import { createCatalog, delayFor, queryProducts } from '../domain/catalog';
 import { handleApi, toApiPath } from '../domain/api';
-import { readWatchIds, tickVisibleStock } from '../domain/stockTick';
+import {
+  readStockTickRequest,
+  readWatchIds,
+  shouldPublishTick,
+  stockTickGapMs,
+  stockTickRequest,
+  tickVisibleStock,
+} from '../domain/stockTick';
 import { joinBasePath } from '../services/api/mode';
 import { formatPrice } from '../domain/money';
 import { placeOrder } from '../domain/orders';
@@ -156,6 +163,22 @@ describe('live stock and api paths', () => {
       joinBasePath('https://mumairkhan115.github.io', '/Bug-Bazaar-Umair/', '/api/products?page=1'),
     ).toBe('https://mumairkhan115.github.io/Bug-Bazaar-Umair/api/products?page=1');
     expect(readWatchIds({ productIds: ['4', 2] })).toEqual(['4']);
+  });
+
+  it('wakes the Pages worker with the products on screen', () => {
+    expect(readStockTickRequest(stockTickRequest(['25', '30']))).toEqual({
+      type: 'stock-tick',
+      productIds: ['25', '30'],
+    });
+    expect(readStockTickRequest({ productIds: ['25'] })).toBeUndefined();
+    expect(readStockTickRequest({ type: 'stock-tick' })).toBeUndefined();
+  });
+
+  it('publishes one stock step about every second', () => {
+    const start = 10_000;
+    expect(shouldPublishTick(start, 0)).toBe(true);
+    expect(shouldPublishTick(start + 400, start)).toBe(false);
+    expect(shouldPublishTick(start + stockTickGapMs, start)).toBe(true);
   });
 });
 

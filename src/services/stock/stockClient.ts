@@ -1,4 +1,4 @@
-import { stockChannelName } from '../../domain/stockTick';
+import { stockChannelName, stockTickGapMs, stockTickRequest } from '../../domain/stockTick';
 import { staticTransport, usesStaticApi } from '../api/mode';
 import { getWatchedProducts, subscribeWatch } from './watchList';
 
@@ -85,6 +85,9 @@ function openDevSocket(handlers: StockHandlers): () => void {
 /**
  * Listens to the Pages worker, which owns the catalog on that host.
  *
+ * JavaScript concept: posting to the controller starts a stopped worker.
+ * A timer inside the worker does not, so the count froze after the browser
+ * shut the worker down.
  * Why: GitHub Pages cannot upgrade a WebSocket. The worker pushes the same payload.
  */
 function openWorkerStock(handlers: StockHandlers): () => void {
@@ -97,6 +100,15 @@ function openWorkerStock(handlers: StockHandlers): () => void {
   };
   const stopWatch = subscribeWatch(sendWatch);
   sendWatch(getWatchedProducts());
+
+  const requestTick = () => {
+    if (stopped) {
+      return;
+    }
+    navigator.serviceWorker.controller?.postMessage(stockTickRequest(getWatchedProducts()));
+  };
+  requestTick();
+  const timer = window.setInterval(requestTick, stockTickGapMs);
 
   channel.addEventListener('message', (event) => {
     if (stopped) {
@@ -111,6 +123,7 @@ function openWorkerStock(handlers: StockHandlers): () => void {
   return () => {
     stopped = true;
     stopWatch();
+    window.clearInterval(timer);
     channel.close();
     handlers.onStatus('closed');
   };
@@ -137,7 +150,7 @@ function openStaticStock(handlers: StockHandlers): () => void {
         handlers.onUpdate(update);
       }
     });
-  }, 4000);
+  }, stockTickGapMs);
 
   return () => {
     stopped = true;
